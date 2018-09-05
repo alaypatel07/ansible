@@ -42,9 +42,8 @@ options:
             - port on which the cluster is listening on
         required: false
 
-
-extends_documentation_fragment:
-    - database
+requirements
+    - etcd3
 
 author:
     - Alay Patel(@alaypatel07)
