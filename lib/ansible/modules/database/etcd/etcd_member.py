@@ -122,8 +122,9 @@ def run_module():
                                           cluster_port=module.params['cluster_port'],
                                           name=module.params['name'],
                                           peer_urls=module.params['peer_urls'])
-            result = {"members": [dict(id=m.id, name=m.name, peer_urls=m.peer_urls, client_urls=m.client_urls)
-                                  for m in members]}
+            result['members'] = [
+                dict(id=m.id, name=m.name, peer_urls=list(m.peer_urls), client_urls=list(m.client_urls))
+                for m in members]
         except Exception as err:
             if str(err) == 'name':
                 module.fail_json(msg='name is empty', **result)
@@ -135,14 +136,14 @@ def run_module():
             members = etcd_member_absent(cluster_host=module.params['cluster_host'],
                                          cluster_port=module.params['cluster_port'],
                                          id=module.params['id'])
-            result = {"members": [dict(id=m.id, name=m.name, peer_urls=m.peer_urls, client_urls=m.client_urls)
-                                  for m in members]}
+            result['members'] = [
+                dict(id=m.id, name=m.name, peer_urls=list(m.peer_urls), client_urls=list(m.client_urls))
+                for m in members]
         except ValueError as err:
             module.fail_json(msg=str(err), **result)
         except Exception as err:
             if str(err) == 'id':
                 module.fail_json(msg='id is not set', **result)
-
     module.exit_json(**result)
 
 
